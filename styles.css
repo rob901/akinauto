@@ -177,14 +177,45 @@ a { text-decoration: none; color: inherit; }
   display: block;
 }
 
-/* ─── Hero (Home) ───────────────────────────────────────────── */
-.hero {
-  background: linear-gradient(135deg, #0f1923 0%, #1e2d3d 60%, #e63c2f22 100%);
-  padding: 80px 60px;
+/* ─── Hero Slideshow ────────────────────────────────────────── */
+.hero-slideshow {
+  position: relative;
+  height: calc(100vh - 0px);
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: top center;
+  opacity: 0;
+  transition: opacity 0.9s ease;
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  padding: 48px 60px;
+  z-index: 2;
+}
+
+.hero-text-box {
+  background: rgba(10, 18, 28, 0.78);
+  backdrop-filter: blur(2px);
+  border-radius: 12px;
+  padding: 40px 48px;
+  max-width: 600px;
   color: var(--white);
 }
 
-.hero h1 {
+.hero-text-box h1 {
   font-size: 2.6rem;
   font-weight: 800;
   line-height: 1.2;
@@ -193,10 +224,34 @@ a { text-decoration: none; color: inherit; }
 
 .hero-sub {
   font-size: 1.1rem;
-  color: #a0aec0;
-  max-width: 560px;
+  color: rgba(255,255,255,0.85);
   margin-bottom: 32px;
   line-height: 1.6;
+}
+
+.slide-dots {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 3;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.7);
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: background 0.2s;
+}
+
+.dot.active {
+  background: var(--white);
 }
 
 /* ─── Buttons ───────────────────────────────────────────────── */
@@ -556,11 +611,21 @@ a { text-decoration: none; color: inherit; }
     padding-top: 56px;
   }
 
-  .hero {
-    padding: 40px 24px;
+  .hero-slideshow {
+    height: calc(100vh - 56px);
   }
 
-  .hero h1 {
+  .hero-overlay {
+    padding: 0 20px;
+    align-items: flex-end;
+    padding-bottom: 60px;
+  }
+
+  .hero-text-box {
+    padding: 28px 28px;
+  }
+
+  .hero-text-box h1 {
     font-size: 1.8rem;
   }
 
@@ -602,7 +667,7 @@ a { text-decoration: none; color: inherit; }
     grid-template-columns: 1fr;
   }
 
-  .hero h1 {
+  .hero-text-box h1 {
     font-size: 1.5rem;
   }
 }
