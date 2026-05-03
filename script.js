@@ -85,54 +85,38 @@ hamburger.addEventListener('click', () => {
 
 overlay.addEventListener('click', closeSidebar);
 
-// ─── Contact Form ─────────────────────────────────────────────
-const form = document.getElementById('contact-form');
-const successMsg = document.getElementById('form-success');
-const errorMsg = document.getElementById('form-error');
-const submitBtn = document.getElementById('submit-btn');
-const btnText = document.getElementById('btn-text');
-const btnLoading = document.getElementById('btn-loading');
+// ─── Work Card Lightbox ───────────────────────────────────────
+const workModal = document.getElementById('work-modal');
+const workModalImg = document.getElementById('work-modal-img');
+const workModalTitle = document.getElementById('work-modal-title');
+const workModalDesc = document.getElementById('work-modal-desc');
 
-form.addEventListener('submit', async (e) => {
-  e.preventDefault();
+function openWorkModal(card) {
+  const img = card.querySelector('img');
+  workModalImg.src = img.src;
+  workModalImg.alt = img.alt;
+  workModalTitle.textContent = card.querySelector('h3').textContent;
+  workModalDesc.textContent = card.querySelector('p').textContent;
+  workModal.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
 
-  // Reset messages
-  successMsg.classList.add('hidden');
-  errorMsg.classList.add('hidden');
+function closeWorkModal() {
+  workModal.classList.remove('open');
+  document.body.style.overflow = '';
+}
 
-  // Show loading state
-  btnText.classList.add('hidden');
-  btnLoading.classList.remove('hidden');
-  submitBtn.disabled = true;
-
-  const payload = {
-    name: form.name.value.trim(),
-    phone: form.phone.value.trim(),
-    email: form.email.value.trim(),
-    vehicle: form.vehicle.value.trim(),
-    message: form.message.value.trim(),
-  };
-
-  try {
-    const res = await fetch('/send-message', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await res.json();
-
-    if (res.ok && data.success) {
-      successMsg.classList.remove('hidden');
-      form.reset();
-    } else {
-      errorMsg.classList.remove('hidden');
-    }
-  } catch (err) {
-    errorMsg.classList.remove('hidden');
-  } finally {
-    btnText.classList.remove('hidden');
-    btnLoading.classList.add('hidden');
-    submitBtn.disabled = false;
-  }
+document.querySelectorAll('.work-card').forEach(card => {
+  card.addEventListener('click', () => openWorkModal(card));
 });
+
+document.getElementById('work-modal-close').addEventListener('click', closeWorkModal);
+
+workModal.addEventListener('click', e => {
+  if (e.target === workModal) closeWorkModal();
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeWorkModal();
+});
+
